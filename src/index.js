@@ -6,7 +6,7 @@ import { productos } from './modules/data.js';
 import * as http from 'http';
 import { initWsServer } from './services/websocket.js';
 
-/** Configurando EXPRESS */
+/** Configuración para EXPRESS */
 const app = express();
 const puerto = 8080;
 
@@ -36,13 +36,16 @@ app.engine(
   })
 );
 
+/**
+ * INICIALIZACION DEL SERVER y SERVICIOS
+ */
 //Creando el objeto http ára usar websocket
 const myServer = http.Server(app);
 
 //Init SocketIo Server
 initWsServer(myServer);
 
-//El server si inicia escuchando
+//El server se inicia escuchando
 myServer.listen(puerto, () => console.log('Server up en puerto', puerto));
 
 /**

@@ -7,18 +7,18 @@ const router = express.Router();
 
 //Creando algunos Productos para pruebas
 //Comentar para verificar el error de no existen productos.
-// for (let id = 1; id <= 4; id++) {
-//   const objDatos = contenido();
-//   const objProducto = new Producto(
-//     objDatos.title,
-//     objDatos.price,
-//     objDatos.thumbnail,
-//     id
-//   );
-//   productos.push(objProducto);
-//   dbIDs.push(id);
-//   lastID.lastID = id;
-// }
+for (let id = 1; id <= 4; id++) {
+  const objDatos = contenido();
+  const objProducto = new Producto(
+    objDatos.title,
+    objDatos.price,
+    objDatos.thumbnail,
+    id
+  );
+  productos.push(objProducto);
+  dbIDs.push(id);
+  lastID.lastID = id;
+}
 
 /**
  * DEFINICION RUTAS BASICAS
@@ -99,9 +99,8 @@ router.post('/guardar', (req, res) => {
 
   //Validando si el guarda es usado desde el form o via json/api
   if (body.form === 'true') {
-    // res.redirect(301, '/');
-    res.end();
-    res.status(200).end();
+    //Deprecated el form no se usa desde un submit, se reemplaza por websocket
+    res.redirect(301, '/');
   } else {
     res.json({
       objProducto,
@@ -124,8 +123,8 @@ router.put('/productos/actualizar/:id', (req, res) => {
   };
 
   if (id < dbIDs[0] || id > dbIDs[dbIDs.length - 1]) {
-    errorGuardar(msgErrorID);
     flagUpdate = false;
+    errorGuardar(msgErrorID);
   }
 
   const indexID = dbIDs.findIndex((ID) => ID === id);

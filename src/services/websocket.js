@@ -1,6 +1,6 @@
 import socketIo from 'socket.io';
-import { guardarFromForm } from './../modules/guardas.js';
-import { productos, dbIDs, lastID } from '../modules/data.js';
+import { guardarFromForm } from '../modules/guardar.js';
+import { productos } from '../modules/data.js';
 
 export const initWsServer = (server) => {
   const io = socketIo(server);

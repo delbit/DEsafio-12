@@ -1,4 +1,4 @@
-import Producto from './../class/producto.js';
+import Producto from '../class/producto.js';
 import { productos, dbIDs, lastID } from './data.js';
 
 export function guardarFromForm(data) {
@@ -24,16 +24,16 @@ export function guardarFromForm(data) {
   if (flagError) {
     return 400;
   } else {
-    lastID.lastID = lastID + 1; // Se incrementa el lastID por que se va a guarda un nuevo valor.
+    lastID.lastID = lastID.lastID + 1; // Se incrementa el lastID por que se va a guarda un nuevo valor.
 
     const objProducto = new Producto(
       data.title,
       data.price,
       data.thumbnail,
-      lastID
+      lastID.lastID
     );
     productos.push(objProducto);
-    dbIDs.push(lastID);
+    dbIDs.push(lastID.lastID);
     return 200;
   }
 }
