@@ -1,4 +1,4 @@
-import { random } from '../module/app.js';
+import { random } from '../modules/app.js';
 
 export default class Producto {
   constructor(title, price, thumbnail, id) {

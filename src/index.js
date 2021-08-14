@@ -2,14 +2,21 @@ import express from 'express';
 import path from 'path';
 import routerApi from './routes/api.js';
 import handlebars from 'express-handlebars';
-import { productos } from './routes/api.js';
+import { productos } from './modules/data.js';
+import * as http from 'http';
+import { initWsServer } from './services/websocket.js';
 
-/** Configurando e Inicializando EXPRESS */
+/** Configurando EXPRESS */
 const app = express();
 const puerto = 8080;
-const server = app.listen(puerto, () =>
-  console.log('Server up en puerto', puerto)
-);
+
+//Iniciando la carpeta public
+const publicPath = path.resolve(__dirname, './../public');
+app.use(express.static(publicPath));
+
+// Módulos usados para aceptar el método post con JSON o urlencoded
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 /** Configurando Handlebars */
 //Estableciendo los path de los views para Handlebars
@@ -29,32 +36,28 @@ app.engine(
   })
 );
 
-server.on('error', (err) => {
-  console.log('ERROR ATAJADO', err);
-});
+//Creando el objeto http ára usar websocket
+const myServer = http.Server(app);
 
-//Iniciando la carpeta public
-const publicPath = path.resolve(__dirname, './../public');
-app.use(express.static(publicPath));
+//Init SocketIo Server
+initWsServer(myServer);
 
-// Módulos usados para aceptar el método post con JSON o urlencoded
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+//El server si inicia escuchando
+myServer.listen(puerto, () => console.log('Server up en puerto', puerto));
 
 /**
  * DEFINICION DE LOS ROUTERS
  */
-
 app.use('/api', routerApi);
 
 // Render de la pagina vista
 app.get('/', (req, res) => {
-  const data = { mostrarForm: true };
+  const data = { mostrarForm: true, mostrarList: true, productos };
   res.render('main', data);
 });
 
 // Render de la pagina vista
 app.get('/productos/vista', (req, res) => {
-  const data = { mostrarList: true, productos };
+  const data = { mostrarVista: true, productos };
   res.render('main', data);
 });

@@ -1,30 +1,24 @@
 import express from 'express';
 import Producto from './../class/producto.js';
-import { contenido } from './../module/app.js';
+import { contenido } from '../modules/app.js';
+import { productos, dbIDs, lastID } from '../modules/data.js';
 
 const router = express.Router();
 
-/**
- * DATOS A MANIPULAR
- */
-export const productos = []; //Array de productos
-const dbIDs = []; //Array de los IDs de los productos
-let lastID = 0; //Ultimo ID de producto utilizado
-
 //Creando algunos Productos para pruebas
 //Comentar para verificar el error de no existen productos.
-for (let id = 1; id <= 4; id++) {
-  const objDatos = contenido();
-  const objProducto = new Producto(
-    objDatos.title,
-    objDatos.price,
-    objDatos.thumbnail,
-    id
-  );
-  productos.push(objProducto);
-  dbIDs.push(id);
-  lastID = id;
-}
+// for (let id = 1; id <= 4; id++) {
+//   const objDatos = contenido();
+//   const objProducto = new Producto(
+//     objDatos.title,
+//     objDatos.price,
+//     objDatos.thumbnail,
+//     id
+//   );
+//   productos.push(objProducto);
+//   dbIDs.push(id);
+//   lastID.lastID = id;
+// }
 
 /**
  * DEFINICION RUTAS BASICAS
@@ -92,20 +86,22 @@ router.post('/guardar', (req, res) => {
     errorGuardar('No imagen');
   }
 
-  lastID = lastID + 1; // Se incrementa el lastID por que se va a guarda un nuevo valor.
+  lastID.lastID = lastID.lastID + 1; // Se incrementa el lastID.lastID por que se va a guarda un nuevo valor.
 
   const objProducto = new Producto(
     body.title,
     body.price,
     body.thumbnail,
-    lastID
+    lastID.lastID
   );
   productos.push(objProducto);
-  dbIDs.push(lastID);
+  dbIDs.push(lastID.lastID);
 
   //Validando si el guarda es usado desde el form o via json/api
   if (body.form === 'true') {
-    res.redirect(301, '/');
+    // res.redirect(301, '/');
+    res.end();
+    res.status(200).end();
   } else {
     res.json({
       objProducto,
